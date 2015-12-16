@@ -16,6 +16,7 @@ public class ZJTabViewPager extends ViewPager {
 
     public ZJTabViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.setPageMargin(0);
     }
 
     public void setCanScroll(boolean isCanScroll) {

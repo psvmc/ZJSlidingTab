@@ -58,7 +58,7 @@ public class MainActivity extends FragmentActivity {
         pager.setCanScroll(true);
         pager.setAdapter(adapter);
 
-        final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
+        final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, getResources()
                 .getDisplayMetrics());
         pager.setPageMargin(pageMargin);
 
