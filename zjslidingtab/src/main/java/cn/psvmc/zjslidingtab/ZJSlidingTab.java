@@ -308,14 +308,14 @@ public class ZJSlidingTab extends HorizontalScrollView {
      */
     private void tabAnimator(final TextView tv) {
         ObjectAnimator anim1 = ObjectAnimator.ofFloat(tv, "alpha", 1f, 0.8f);
-        anim1.setDuration(60);
+        anim1.setDuration(30);
         anim1.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
                 tv.setTextColor(indicatorColor);
             }
         });
         ObjectAnimator anim2 = ObjectAnimator.ofFloat(tv, "alpha", 0.8f, 1f);
-        anim1.setDuration(120);
+        anim1.setDuration(80);
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.play(anim1).before(anim2);
         animatorSet.start();
