@@ -65,8 +65,11 @@ public class MainActivity extends FragmentActivity {
         tabs.setViewPager(pager);
         //下面线的高度
         tabs.setIndicatorHeight(6);
+
         changeColor(currentColor);
+        tabs.setSelectItem(2);
     }
+
 
     private void changeColor(int newColor) {
         tabs.setIndicatorColor(newColor);

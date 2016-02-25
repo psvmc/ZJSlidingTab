@@ -32,7 +32,7 @@ import java.util.Locale;
 public class ZJSlidingTab extends HorizontalScrollView {
 
     public interface IconTabProvider {
-        public int getPageIconResId(int position);
+        int getPageIconResId(int position);
     }
 
     // @formatter:off
@@ -82,6 +82,9 @@ public class ZJSlidingTab extends HorizontalScrollView {
     private int tabBackgroundResId = R.drawable.background_tab;
 
     private Locale locale;
+
+    //是否使用动画
+    private boolean isUseAnimation = false;
 
     public ZJSlidingTab(Context context) {
         this(context, null);
@@ -174,6 +177,15 @@ public class ZJSlidingTab extends HorizontalScrollView {
         this.delegatePageListener = listener;
     }
 
+    /**
+     * 设置选中的项
+     * @param position
+     */
+    public void setSelectItem(int position){
+        currentPosition = position;
+        pager.setCurrentItem(position);
+    }
+
     public void notifyDataSetChanged() {
 
         tabsContainer.removeAllViews();
@@ -237,6 +249,7 @@ public class ZJSlidingTab extends HorizontalScrollView {
         tab.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                isUseAnimation = true;
                 pager.setCurrentItem(position);
             }
         });
@@ -251,13 +264,9 @@ public class ZJSlidingTab extends HorizontalScrollView {
     private void updateTabStyles() {
 
         for (int i = 0; i < tabCount; i++) {
-
             View v = tabsContainer.getChildAt(i);
-
             v.setBackgroundResource(tabBackgroundResId);
-
             if (v instanceof TextView) {
-
                 TextView tab = (TextView) v;
                 tab.setTypeface(tabTypeface, tabTypefaceStyle);
                 if (currentPosition == i) {
@@ -265,6 +274,7 @@ public class ZJSlidingTab extends HorizontalScrollView {
                     tabAnimator(tab);
                 } else {
                     tab.setTextSize(TypedValue.COMPLEX_UNIT_PX, tabTextSize);
+
                     tab.setTextColor(tabTextColor);
                 }
 
@@ -307,18 +317,23 @@ public class ZJSlidingTab extends HorizontalScrollView {
      * @param tv
      */
     private void tabAnimator(final TextView tv) {
-        ObjectAnimator anim1 = ObjectAnimator.ofFloat(tv, "alpha", 1f, 0.8f);
-        anim1.setDuration(30);
-        anim1.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animation) {
-                tv.setTextColor(indicatorColor);
-            }
-        });
-        ObjectAnimator anim2 = ObjectAnimator.ofFloat(tv, "alpha", 0.8f, 1f);
-        anim1.setDuration(80);
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.play(anim1).before(anim2);
-        animatorSet.start();
+        if(isUseAnimation){
+            isUseAnimation = false;
+            ObjectAnimator anim1 = ObjectAnimator.ofFloat(tv, "alpha", 1f, 0.8f);
+            anim1.setDuration(30);
+            anim1.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animation) {
+                    tv.setTextColor(indicatorColor);
+                }
+            });
+            ObjectAnimator anim2 = ObjectAnimator.ofFloat(tv, "alpha", 0.8f, 1f);
+            anim1.setDuration(80);
+            AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.play(anim1).before(anim2);
+            animatorSet.start();
+        }else{
+            tv.setTextColor(indicatorColor);
+        }
     }
 
     @Override
@@ -381,6 +396,7 @@ public class ZJSlidingTab extends HorizontalScrollView {
             if (delegatePageListener != null) {
                 delegatePageListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
             }
+            isUseAnimation = true;
         }
 
         @Override
